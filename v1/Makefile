@@ -1,15 +1,17 @@
-all: rom.bin
 
-HEXDUMP=od -A x -t x1z
+TARGET=hello
+IMAGE=$(TARGET).bin
 
-dump: rom.bin
-	@$(HEXDUMP) rom.bin
+all: $(IMAGE)
 
-burn: rom.bin
-	minipro -p AT28C256 -w rom.bin
+dump: $(IMAGE)
+	@od -A x -t x1z $(IMAGE)
 
-rom.bin: blink.s
-	vasm6502_oldstyle -dotdir -Fbin -o rom.bin blink.s
+burn: $(IMAGE)
+	minipro -p AT28C256 -w $(IMAGE)
+
+%.bin: %.s
+	vasm6502_oldstyle -dotdir -Fbin -o $@ $<
 
 clean:
-	rm -rf rom.bin
+	rm -rf *.bin
