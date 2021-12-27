@@ -12,8 +12,8 @@ const char DATA[] = {
 #define RWB  4
 
 /* gobals */
-int ticks = 0;
-
+unsigned int ticks = 0;
+int traceall = 0;
 
 void setup() {
   for (int i = 0; i < 16; i++) {
@@ -49,9 +49,15 @@ void on_clock() {
     int bit = digitalRead(DATA[i]) ? 1 : 0;
     data = (data << 1) | bit;
   }
-  char rw = digitalRead(RWB) ? 'r' : 'w'; 
-  sprintf(diag, "%06d %c %04x %02x\n", ticks++, rw, addr, data);
-  Serial.print(diag);
+  if (addr == 0xfffd) {
+      ticks = 0;
+  }
+  char rw = digitalRead(RWB) ? 'r' : 'w';
+  char ch = isPrintable(data) ? data : '.';
+  sprintf(diag, "%012d %04x %c %02x %c\n", ticks++, addr, rw, data, ch);
+  if (traceall || (0x0002<=addr && addr<=0x4000)) {
+      Serial.print(diag);
+  }
 }
 
 void loop() {
