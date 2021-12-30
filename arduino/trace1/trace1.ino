@@ -13,7 +13,7 @@ const char DATA[] = {
 
 /* gobals */
 unsigned int ticks = 0;
-int traceall = 0;
+int traceall = 1;
 
 void setup() {
   for (int i = 0; i < 16; i++) {
@@ -55,7 +55,7 @@ void on_clock() {
   char rw = digitalRead(RWB) ? 'r' : 'w';
   char ch = isPrintable(data) ? data : '.';
   sprintf(diag, "%012d %04x %c %02x %c\n", ticks++, addr, rw, data, ch);
-  if (traceall || (0x0002<=addr && addr<=0x4000)) {
+  if (traceall || (0x0000<=addr && addr<=0x4000)) {
       Serial.print(diag);
   }
 }

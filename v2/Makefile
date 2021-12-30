@@ -1,5 +1,5 @@
 
-TARGET=memtest
+TARGET=hello
 IMAGE=$(TARGET).bin
 
 all: $(IMAGE)
