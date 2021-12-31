@@ -2,9 +2,6 @@
 ; Display a message on the HD4478U LCD module.
 ; Based on Ben Eater's 6502 example.
 ;
-; Limitations:
-; * This version only works with a slow clock rate (~200Hz) since we do
-;   not check the LCD busy flag before writing.
 ;
 
 PORTB = $6000
@@ -50,8 +47,30 @@ print_string:
     inx                 ; Next char
     jmp print_string    ; Print next char
 
+lcd_wait:
+    ; Wait until the LCD busy flag is clear before sending
+    ; next instruction or data.
+    pha
+    lda #%00000000
+    sta DDRB            ; Set port B to input mode on all pins
+lcd_busy_retry:
+    lda #RW
+    sta PORTA           ; Set RS=0, RW=1, E=0
+    lda #(RW | E)
+    sta PORTA           ; Set E to execute
+    lda PORTB           ; Read data from LCD
+    and #%10000000      ; Is the busy flag set?
+    bne lcd_busy_retry  ; Yes: retry
+    lda #RW
+    sta PORTA           ; Clear E to stop reading.
+    lda #%11111111
+    sta DDRB            ; Restore port B to output mode on all pins
+    pla
+    rts
+
 lcd_instruction:
     ; Instruction must be loaded in A.
+    jsr lcd_wait
     sta PORTB
     lda #$0             ; Clear RS, RW, E bits
     sta PORTA
