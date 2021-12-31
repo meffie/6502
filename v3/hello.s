@@ -17,7 +17,7 @@ RS = %00100000
 
     .org $8000
 message:
-    .asciiz "Hello world!"
+    .asciiz "    Happy                                  New Year!                            "
 
 reset:
     ; Setup I/O ports.
