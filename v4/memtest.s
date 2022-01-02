@@ -15,15 +15,16 @@ pattern = $cb          ; Test pattern
 maxpage = $3f          ; Last page
 
     .org $8000
-title:
-    .asciiz "memtest 01/01/2022"
-ok_msg:
-    .asciiz "Pass"
-fail_msg:
-    .asciiz "Fail"
+title:       .asciiz "memtest 01/01/2022"
+testing_msg: .asciiz "Testing..."
+ok_msg:      .asciiz "Pass"
+fail_msg:    .asciiz "Fail"
 
 reset:
     jsr lcd_setup
+    lda #<testing_msg
+    ldx #>testing_msg
+    jsr lcd_print_string
 
 mem_test:
     ; Test page $00.
@@ -58,12 +59,14 @@ next_index:
     bne next_page      ; No: test next page
 
 ok:
+    jsr lcd_clear
     lda #<ok_msg
     ldx #>ok_msg
     jsr lcd_print_string
     jmp spin
 
 fail:
+    jsr lcd_clear
     lda #<fail_msg
     ldx #>fail_msg
     jsr lcd_print_string

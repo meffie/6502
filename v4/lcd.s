@@ -32,6 +32,11 @@ lcd_setup:
     jsr lcd_instruction
     rts
 
+lcd_clear:
+    lda #%00000001      ; Clear display.
+    jsr lcd_instruction
+    rts
+
 lcd_print_string:
     ; Display a string at the current cursor.
     ; (A, X) = string address (lo, hi)
