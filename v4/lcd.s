@@ -3,7 +3,9 @@
 ; Based on Ben Eater's 6502 videos.
 ;
 
+; Zero page registers.
 lcd_string = $0
+lcd_address = $2
 
 PORTB = $6000
 PORTA = $6001
@@ -103,3 +105,63 @@ lcd_print_char:
     lda #RS             ; Set RS, clear RW and E
     sta PORTA
     rts
+
+;-----------------------------------------------------------------------------
+; Print memory address and values as hex digits.
+;
+; A, X = address to print (lo, hi)
+;
+lcd_print_address:
+    sta lcd_address      ; address lo byte
+    stx lcd_address + 1  ; address hi byte
+    lda lcd_address + 1
+    jsr lcd_print_byte   ; Print address hi byte
+    lda lcd_address
+    jsr lcd_print_byte   ; Print address lo byte
+    lda #":"
+    jsr lcd_print_char   ; Print separator
+    ldy #$00
+    lda (lcd_address),y
+    jsr lcd_print_byte   ; Print address[0]
+    lda #" "
+    jsr lcd_print_char   ; Print separator
+    iny
+    lda (lcd_address),y
+    jsr lcd_print_byte   ; Print address[1]
+    lda #" "
+    jsr lcd_print_char   ; Print separator
+    iny
+    lda (lcd_address),y
+    jsr lcd_print_byte   ; Print address[2]
+    lda #" "
+    jsr lcd_print_char   ; Print separator
+    iny
+    lda (lcd_address),y
+    jsr lcd_print_byte   ; Print address[3]
+    rts
+
+;-----------------------------------------------------------------------------
+; Print A as hex digits.
+;
+; A = value to print
+;
+lcd_print_byte:
+    pha
+    and #$f0
+    clc
+    ror
+    ror
+    ror
+    ror
+    tax
+    lda lcd_hexdigits,x
+    jsr lcd_print_char
+    ;lda ($08),y
+    pla
+    and #$0f
+    tax
+    lda lcd_hexdigits,x
+    jsr lcd_print_char
+    rts
+lcd_hexdigits:
+    .byte "0123456789abcdef"
