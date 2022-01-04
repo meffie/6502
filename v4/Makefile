@@ -1,5 +1,5 @@
 
-TARGET=hex
+TARGET=irq
 IMAGE=$(TARGET).bin
 
 all: $(IMAGE)
@@ -18,6 +18,9 @@ memtest.bin: memtest.s lcd.s
 
 hex.bin: hex.s lcd.s
 	vasm6502_oldstyle -dotdir -Fbin -o hex.bin hex.s
+
+irq.bin: irq.s lcd.s
+	vasm6502_oldstyle -dotdir -Fbin -o irq.bin irq.s
 
 clean:
 	rm -rf *.bin

@@ -39,6 +39,11 @@ lcd_clear:
     jsr lcd_instruction
     rts
 
+lcd_home:
+    lda #%00000010      ; Move cursor to home position.
+    jsr lcd_instruction
+    rts
+
 lcd_print_string:
     ; Display a string at the current cursor.
     ; (A, X) = string address (lo, hi)
