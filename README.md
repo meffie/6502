@@ -1,3 +1,6 @@
-# 6502 microprocessor project
+# 6502 breadboard computer
 
-Based on [Ben Eater's excellent video series](https://eater.net/6502).
+![6502](images/6502.jpg?raw=true "6502 breadboard")
+
+A 6502 breadboard computer based on [Ben Eater's excellent video
+series](https://eater.net/6502).
