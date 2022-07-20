@@ -1,10 +1,9 @@
 /* pin numbers */
 const char ADDR[] = {
-  52, 50, 48, 46, 44, 42, 40, 38,
-  36, 34, 32, 30, 28, 26, 24, 22
+  22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52  /* a15 .. a0 */
 };
 const char DATA[] = {
-  53, 51, 49, 47, 45, 43, 41, 39
+  39, 41, 43, 45, 47, 49, 51, 53 /* d7 .. d0 */
 };
 
 #define CLK  2
@@ -31,7 +30,6 @@ void setup() {
 }
 
 void on_reset() {
-  ticks = 0;
   Serial.println();
   Serial.print("Reset");
   Serial.println();
