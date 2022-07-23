@@ -6,8 +6,9 @@ const char DATA[] = {
   39, 41, 43, 45, 47, 49, 51, 53 /* d7 .. d0 */
 };
 
-#define CLK  2
-#define RESB 3
+
+#define RESB 2
+#define CLK  3
 #define RWB  4
 
 /* gobals */
@@ -31,8 +32,7 @@ void setup() {
 
 void on_reset() {
   Serial.println();
-  Serial.print("Reset");
-  Serial.println();
+  Serial.println("Reset");
 }
 
 void on_clock() {
