@@ -3,7 +3,7 @@
 
 ; Write then read a test byte to each addressable memory location in RAM.  First
 ; test page zero ($0000 to $00ff) using page zero address modes.  Then test the
-; rest of the pages ($0010 to $3fff) using indirect y-index address mode. The
+; rest of the pages ($0100 to $3fff) using indirect y-index address mode. The
 ; base pointer is stored in bytes $0000 and $00ff. This test takes a while to
 ; run, and of course clobbers all the the memory in the system, including the
 ; stack at $0100 to $01ff.
