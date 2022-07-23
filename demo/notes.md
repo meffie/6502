@@ -1,3 +1,5 @@
+Part 1: Machine code
+====================
 
 Create a blank rom.
 
@@ -15,22 +17,42 @@ Burn the rom with minipro:
 
 Show reset vector fffc,fffd jump to eaea then pc increments.
 
+Next, here's simple program, load a value in A, then write to ram.
 
-Next, simple program, load a value in A, then write to ram.
+   a9 08     <- load hex 8 in the accumulator
+   8d 00 02  <- store accumulator in memory address 0x0200
+   ea        <- no op
+   ea        <- no op
+   4c 05 80  <- jmp to no op (spin)
+
+   a908 8d00 02ea ea4c 0580    <-program
 
 Create a dump file with xxd that can be edited.
 
-   xxd -g1 rom.bin > rom.dump
+   xxd rom.bin > rom.dump
+
+   vi rom.dump
+   0000:   a908 8d00 02ea ea4c 0580    <-program
+
+   fffc:   0080                        <-reset vector
+
+   xxd -r rom.dump rom.bin
+   minipro -p AT28C256 -w rom.bin
 
 
-   a9 08  <- load hex 8 in the accumulator
-   8d 00 02  <- store accumulator in memory address 0x0200
+Part 2: Assembler
+=================
 
-0000:   a9 08 8d 00 02     <-program
-fffc:   00 08              <-reset vector
+We will use the vasm assembler to create the rom.
 
-Next, simple count down.
+    .org $8000    ; start of ROM
 
-   a2 08  <- load hex 8 in register X
-   ca     <- decrement X
-          <- jump back if not zero
+start:
+    lda #$08      ; read a byte
+    sta $0200     ; write a byte
+    jmp start
+
+    .org $fffc    ; reset vector
+    .word start   ; jump to start on reset
+    .word $0000   ; padding so image is 32k
+
