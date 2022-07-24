@@ -5,7 +5,8 @@ BINS = \
   hello.bin \
   memtest.bin \
   hex.bin \
-  irq.bin
+  irq.bin \
+  panel1.bin
 
 all: $(BINS)
 
@@ -22,6 +23,7 @@ hello.bin: hello.s lcd.s
 memtest.bin: memtest.s lcd.s
 hex.bin: hex.s lcd.s
 irq.bin: irq.s lcd.s
+panel1.bin: panel1.s
 
 clean:
 	rm -rf *.bin

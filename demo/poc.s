@@ -1,9 +1,9 @@
 ;
-; Proof a concept assembler source.
+; Proof of concept assembler source.
 ;
 ; To convert this to machine code:
 ;
-;    ./poc-asm.sh < poc.s
+;    cat poc.s | ./poc-asm.sh | xxd -r -p > poc.bin
 ;
 
 start:           ; start label

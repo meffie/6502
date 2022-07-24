@@ -8,16 +8,16 @@
     .org $8000
 
 start:
-    lda #$ff      ; set all bits to be output
+    lda #$10      ; pin 5 is output
     sta $6003     ; Data Direction Resister A (DDRA)
 
 loop:
-    lda #$55      ; Turn on every other bit.
+    lda #$10      ; Turn on pin 5
     sta $6001     ; Write to port A
-    lda #$aa      ; Toggle bits.
+    lda #$00      ; Turn off pin 5
     sta $6001     ; Write to port A.
     jmp loop      ; Loop forever
 
     .org $fffc
-    .word start   ; Reset vector.
+    .word start   ; Reset vector
     .word $0000   ; Padding
