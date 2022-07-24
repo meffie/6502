@@ -1,8 +1,13 @@
 
-TARGET=irq
-IMAGE=$(TARGET).bin
+IMAGE = hello.bin
 
-all: $(IMAGE)
+BINS = \
+  hello.bin \
+  memtest.bin \
+  hex.bin \
+  irq.bin
+
+all: $(BINS)
 
 dump: $(IMAGE)
 	@od -A x -t x1z $(IMAGE)
@@ -10,17 +15,13 @@ dump: $(IMAGE)
 burn: $(IMAGE)
 	minipro -p AT28C256 -w $(IMAGE)
 
+%.bin: %.s
+	vasm6502_oldstyle -dotdir -Fbin -o $@ $<
+
 hello.bin: hello.s lcd.s
-	vasm6502_oldstyle -dotdir -Fbin -o hello.bin hello.s
-
 memtest.bin: memtest.s lcd.s
-	vasm6502_oldstyle -dotdir -Fbin -o memtest.bin memtest.s
-
 hex.bin: hex.s lcd.s
-	vasm6502_oldstyle -dotdir -Fbin -o hex.bin hex.s
-
 irq.bin: irq.s lcd.s
-	vasm6502_oldstyle -dotdir -Fbin -o irq.bin irq.s
 
 clean:
 	rm -rf *.bin
