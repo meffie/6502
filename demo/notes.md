@@ -25,7 +25,7 @@ Next, here's simple program, load a value in A, then write to ram.
    ea        <- no op
    4c 05 80  <- jmp to no op (spin)
 
-   a908 8d00 02ea ea4c 0580    <-program
+   a9088d0002eaea4c0580    <-program
 
 Create a dump file with xxd that can be edited.
 

@@ -12,5 +12,4 @@ while read op arg; do
     *) ;;
     esac
 done
-
 echo ""

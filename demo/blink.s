@@ -1,4 +1,6 @@
 ;
+; Blink an led connected to port A.
+;
 ; To create rom:
 ;
 ;  vasm6502_oldstyle -dotdir -Fbin -o blink.bin blink.s
