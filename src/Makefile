@@ -6,7 +6,9 @@ BINS = \
   memtest.bin \
   hex.bin \
   irq.bin \
-  panel1.bin
+  panel1.bin \
+  panel2.bin \
+  panel3.bin
 
 all: $(BINS)
 
