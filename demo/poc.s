@@ -1,14 +1,10 @@
 ;
-; Proof of concept assembler source.
-;
-; To convert this to machine code:
-;
-;    cat poc.s | ./poc-asm.sh | xxd -r -p > poc.bin
+; 6502 demo (proof of concept assembly)
 ;
 
-start:           ; start label
-    lda 08       ; load a value in the accumulator
-    sta 0200     ; write the value to a memory location
+    lda 08        ; load a value in the accumulator
+    sta 0200      ; write the value to a memory location
+
 loop:
-    nop          ; delay
-    jmp loop     ; loop forever
+    nop           ; delay
+    jmp loop      ; loop forever

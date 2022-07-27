@@ -1,16 +1,16 @@
 ;
-; To create rom:
-;
-;  vasm6502_oldstyle -dotdir -Fbin -o first.bin first.s
-;  minipro -p AT28C256 -w first.bin
+; 6502 demo
 ;
 
     .org $8000    ; start of ROM
 
-start:
-    lda #$08      ; read a byte
-    sta $0200     ; write a byte
-    jmp start
+start:            ; start label
+    lda #$08      ; load a value in the accumulator
+    sta $0200     ; write the value to a memory location
+
+loop:
+    nop           ; delay
+    jmp loop      ; loop forever
 
     .org $fffc    ; reset vector
     .word start   ; jump to start on reset

@@ -1,25 +1,20 @@
 ;
-; Blink an led connected to port A.
-;
-; To create rom:
-;
-;  vasm6502_oldstyle -dotdir -Fbin -o blink.bin blink.s
-;  minipro -p AT28C256 -w blink.bin
+; 6502 demo
 ;
 
-    .org $8000
+    .org $8000    ; start of ROM
 
 start:
     lda #$10      ; pin 5 is output
-    sta $6003     ; Data Direction Resister A (DDRA)
+    sta $6002     ; Data Direction Resister B (DDRB)
 
 loop:
     lda #$10      ; Turn on pin 5
-    sta $6001     ; Write to port A
+    sta $6000     ; Write to port B
     lda #$00      ; Turn off pin 5
-    sta $6001     ; Write to port A.
+    sta $6000     ; Write to port B.
     jmp loop      ; Loop forever
 
-    .org $fffc
-    .word start   ; Reset vector
-    .word $0000   ; Padding
+    .org $fffc    ; reset vector
+    .word start   ; jump to start on reset
+    .word $0000   ; padding so image is 32k

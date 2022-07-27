@@ -1,13 +1,14 @@
 ;
-; 7 segment led
+; 6502 demo
 ;
-;
 
-PB   .equ $6000
-DDRB .equ $6002
+; Definitions
+PB   .equ $6000   ; i/o port b
+DDRB .equ $6002   ; data direction resgister for port b
 
-    .org $8000
+    .org $8000    ; start of ROM
 
+; 7 segment led table
 segments:
     .byte %01111101 ; 0
     .byte %00110000 ; 1
@@ -26,23 +27,21 @@ segments:
     .byte %01001111 ; e
     .byte %00001111 ; f
 
-reset:
-    lda #$ff      ; Set port pins to output mode
+start:
+    lda #$ff      ; set port b pins to output mode
     sta DDRB
 
-begin:
-    ldx #$00
+zero:
+    ldx #$00        ; x = 0
 
 next:
-    lda segments,x
-    sta PB
+    lda segments,x  ; convert x to bitmap
+    sta PB          ; write byte to display
+    inx             ; increment x
+    cpx #$10        ; is x > $0f ?
+    bne next        ; no: keep going
+    jmp zero        ; yes: go back to zero
 
-    inx
-    cpx #$10
-    bne next
-
-    jmp begin
-
-    .org $fffc
-    .word reset   ; Reset vector
-    .word $0000   ; Padding
+    .org $fffc    ; reset vector
+    .word start   ; jump to start on reset
+    .word $0000   ; padding so image is 32k
