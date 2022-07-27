@@ -84,7 +84,7 @@ a program to convert text to the machine code?
     done
     echo ""
 
-    cat poc.s | ./pasm.sh 
+    cat poc.s | ./pasm.sh
     a9088d0002ea4c0000
                   ^^^^ todo
 
@@ -95,7 +95,7 @@ To convert this to machine code:
     echo 0080 | xxd -r -p -s 0x7ffc - rom.bin
 
 This assember runs on the "host" and generates op codes for the "target".  What
-if the input program was an implementation for an assembler! The we would could
+if the input program was an implementation for an assembler? Then we would could
 self-host.
 
 Part 2: Assembler
@@ -103,14 +103,11 @@ Part 2: Assembler
 
 We will use the vasm assembler to create the rom.
 
-    .org $8000    ; start of ROM
+demos
 
-start:
-    lda #$08      ; read a byte
-    sta $0200     ; write a byte
-    jmp start
-
-    .org $fffc    ; reset vector
-    .word start   ; jump to start on reset
-    .word $0000   ; padding so image is 32k
-
+0. convert our machine code to assembly
+1. turn on a led on port b
+2. connect 7 segment display to port b
+3. display numbers on 7 segment
+4. use interrupts to read port a
+5. read toggle switches on port a, write output on port b
