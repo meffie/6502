@@ -1,31 +1,18 @@
-
-IMAGE = hello.bin
-
-BINS = \
-  hello.bin \
-  memtest.bin \
-  hex.bin \
-  irq.bin \
-  panel1.bin \
-  panel2.bin \
-  panel3.bin
+IMAGE := hello
+BINS := $(patsubst %.s,%.bin,$(wildcard *.s))
 
 all: $(BINS)
 
-dump: $(IMAGE)
-	@od -A x -t x1z $(IMAGE)
-
-burn: $(IMAGE)
-	minipro -p AT28C256 -w $(IMAGE)
+burn: $(IMAGE).bin
+	minipro -p AT28C256 -w $(IMAGE).bin
 
 %.bin: %.s
-	vasm6502_oldstyle -dotdir -Fbin -o $@ $<
-
-hello.bin: hello.s lcd.s
-memtest.bin: memtest.s lcd.s
-hex.bin: hex.s lcd.s
-irq.bin: irq.s lcd.s
-panel1.bin: panel1.s
+	vasm6502_oldstyle -quiet -dotdir -Fbin -o $@ $<
 
 clean:
 	rm -rf *.bin
+
+hello.bin: lcd.s
+memtest.bin: lcd.s
+hex.bin: lcd.s
+irq.bin: lcd.s
