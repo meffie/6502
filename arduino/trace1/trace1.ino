@@ -47,15 +47,13 @@ void on_clock() {
     int bit = digitalRead(DATA[i]) ? 1 : 0;
     data = (data << 1) | bit;
   }
-  if (addr == 0xfffd) {
-      ticks = 0;
+  char rw = digitalRead(RWB) ? 'r' : 'W';
+  if (isPrintable(data)) {
+     sprintf(diag, "%08d    %04x  %c  %02x %c\n", ticks++, addr, rw, data, data);
+  } else {
+     sprintf(diag, "%08d    %04x  %c  %02x\n", ticks++, addr, rw, data);
   }
-  char rw = digitalRead(RWB) ? 'r' : 'w';
-  char ch = isPrintable(data) ? data : '.';
-  sprintf(diag, "%012d %04x %c %02x %c\n", ticks++, addr, rw, data, ch);
-  if (traceall || (0x0000<=addr && addr<=0x4000)) {
-      Serial.print(diag);
-  }
+  Serial.print(diag);
 }
 
 void loop() {
