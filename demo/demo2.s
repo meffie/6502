@@ -12,10 +12,11 @@ start:
     lda #$ff      ; set port b pins to output mode
     sta DDRB
 
+    clc
     lda #%00000001 ; initialize
 next:
     sta PB        ; write byte to port b
-    asl           ; shift left for next byte
+    rol           ; shift left for next byte
     jmp next
 
     .org $fffc    ; reset vector
