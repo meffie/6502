@@ -52,7 +52,7 @@ void on_clock() {
   }
   char rw = digitalRead(RWB) ? 'r' : 'w';
   char ch = isPrintable(data) ? data : '.';
-  sprintf(diag, "%012d %04x %c %02x %c\n", ticks++, addr, rw, data, ch);
+  sprintf(diag, "%08d   %04x   %c   %02x %c\n", ticks++, addr, rw, data, ch);
   if (traceall || (0x0000<=addr && addr<=0x4000)) {
       Serial.print(diag);
   }
