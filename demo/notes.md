@@ -1,52 +1,54 @@
 Part 1: Machine code
 ====================
 
-Create a blank rom.
+Create a blank rom, 32k bytes.
 
-    cat /dev/zero | dd of=rom.bin bs=1024 count=32
+    $ cat /dev/zero | dd of=rom.bin bs=1024 count=32
+    $ xxd rom.bin
 
 Create a rom filled with NOPs
 
-    NOP is $ea = 1110 1010 = 11|101|010 = 352 octal
+    NOP is $ea, which is 352 octal
 
-    cat /dev/zero | tr '\000' '\352' | dd of=rom.bin bs=1024 count=32
+    $ printf "%o\n" 0xea
+    352
+    $ cat /dev/zero | tr '\000' '\352' | dd of=rom.bin bs=1024 count=32
+    $ xxd rom.bin
 
-Burn the rom with minipro:
+Burn the rom with [minipro](https://gitlab.com/DavidGriffith/minipro)
 
-	minipro -p AT28C256 -w rom.bin
+	$ minipro -p AT28C256 -w rom.bin
 
 Show reset vector fffc,fffd jump to eaea then pc increments.
 
 Next, here's simple program, load a value in A, then write to ram.
 
-   a9 08     <- load hex 8 in the accumulator
-   8d 00 02  <- store accumulator in memory address 0x0200
-   ea        <- no op
-   4c 05 80  <- jump to no op (spin)
-
-   a9088d0002ea4c0580    <-program
+    a9 08     <- load hex 8 in the accumulator
+    8d 00 02  <- store accumulator in memory address 0x0200
+    ea        <- no op
+    4c 05 80  <- jump to no op (spin)
 
 Edit method:
 
 Create a dump file with xxd that can be edited, edit
 the dump, and revert back to binary.
 
-   xxd rom.bin > rom.dump
+   $ xxd rom.bin > rom.dump
 
    vi rom.dump
-   0000:   a908 8d00 02ea ea4c 0580    <-program
-   7ffc:   0080                        <-reset vector
+   8000:   a908 8d00 02ea ea4c 0580    <-program
+   fffc:   0080                        <-reset vector
 
-   xxd -r rom.dump rom.bin
-   minipro -p AT28C256 -w rom.bin
+   $ xxd -r rom.dump > rom.bin
+   $ minipro -p AT28C256 -w rom.bin
 
 Patch method:
 
 If the output is a file (not stdout), xxd will patch it.
 
-    cat /dev/zero | dd of=rom.bin bs=1024 count=32
-    echo a9088d0002ea4c0580 | xxd -r -p - rom.bin
-    echo 0080 | xxd -r -p -s 0x7ffc - rom.bin
+    $ cat /dev/zero | dd of=rom.bin bs=1024 count=32
+    $ echo a9 08 8d 00 02 ea 4c 05 80 | xxd -r -p - rom.bin
+    $ echo 00 80 | xxd -r -p -s 0x7ffc - rom.bin
 
 
 Part 1b: Proof of concept assembler
