@@ -5,7 +5,7 @@
     .org $8000    ; start of ROM
 
 start:
-    lda #$10      ; pin 5 is output
+    lda #$ff      ; set pins to output
     sta $6002     ; Data Direction Resister B (DDRB)
 
 loop:
