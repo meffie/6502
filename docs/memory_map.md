@@ -73,3 +73,28 @@ the address range $6000 to $600E.
     $600C  PCR Peripheral Control Register
     $600D  IFR Interrupt Flag Register
     $600E  IER Interrupt Enable Register
+
+
+Serial I/O
+----------
+
+
+    +------------------+-------+-----------+-----------+-----------+----------+
+    |                  |  ROM  |    RAM    |    VIA    |    ACIA   | Selected |
+    |  A15  A14  A13   |  /CS  |  /CS /OE  |  CS1 /CS2 |  CS0 /CS1 |          |
+    +------------------+-------+-----------+-----------+-----------+----------+
+    |   0    0    0    |   1   |>  0   0  <|   0   1   |   1   1   |   RAM    |
+    |   0    0    1    |   1   |>  0   0  <|   1   1   |   0   1   |   RAM    |
+    |   0    1    0    |   1   |   0   1   |   0   0   |>  1   0  <|   ACIA   |
+    |   0    1    1    |   1   |   0   1   |>  1   0  <|   0   0   |   VIA    |
+    |   1    0    0    |>  0  <|   1   0   |   0   1   |   1   1   |   ROM    |
+    |   1    0    1    |>  0  <|   1   0   |   1   1   |   0   1   |   ROM    |
+    |   1    1    0    |>  0  <|   1   0   |   0   1   |   1   1   |   ROM    |
+    |   1    1    1    |>  0  <|   1   0   |   1   1   |   0   1   |   ROM    |
+    +------------------+-------+-----------+-----------+-----------+----------+
+
+
+The ACIA is selected when CS0 is high and /CS1 is low.
+
+    CS0 = not(A13)
+    /CS1 = nand(A14, not(A15))
