@@ -50,13 +50,22 @@ Parts List
       <td></td>
     </tr>
     <tr>
-      <td>C1</td>
+      <td>X1</td>
       <td>OSC1</td>
       <td>1 MHz clock oscillator</td>
       <td></td>
     </tr>
   </tbody>
 </table>
+
+Schematics
+-----------
+
+![main](images/mm6502-main.png?raw=true "Main")
+
+![decode](images/mm6502-decode.png?raw=true "Address decode")
+
+![reset](images/mm6502-reset.png?raw=true "Reset")
 
 Memory Map
 ----------
@@ -98,8 +107,7 @@ Memory Map
   </tbody>
 </table>
 
-Address Decoding Logic
-----------------------
+*Address Decoding Logic*
 
 See Garth Wilson's [address decoding
 document](http://wilsonminesco.com/6502primer/addr_decoding.html) to learn about
