@@ -1,0 +1,277 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr USLetter 11000 8500
+encoding utf-8
+Sheet 1 1
+Title "MM6502"
+Date "2023-01-18"
+Rev "1"
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Timer:LM555 U5
+U 1 1 63CC6136
+P 5050 3550
+F 0 "U5" H 5300 3900 50  0000 C CNN
+F 1 "LM555" H 5350 3200 50  0000 C CNN
+F 2 "" H 5050 3550 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/lm555.pdf" H 5050 3550 50  0001 C CNN
+	1    5050 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 63CC6BC5
+P 4850 4350
+F 0 "#PWR?" H 4850 4100 50  0001 C CNN
+F 1 "GND" H 4855 4177 50  0000 C CNN
+F 2 "" H 4850 4350 50  0001 C CNN
+F 3 "" H 4850 4350 50  0001 C CNN
+	1    4850 4350
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5C #PWR?
+U 1 1 63CC7A8A
+P 4800 2700
+F 0 "#PWR?" H 4800 2550 50  0001 C CNN
+F 1 "+5C" H 4815 2873 50  0000 C CNN
+F 2 "" H 4800 2700 50  0001 C CNN
+F 3 "" H 4800 2700 50  0001 C CNN
+	1    4800 2700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C2
+U 1 1 63CCB368
+P 4500 4050
+F 0 "C2" H 4615 4096 50  0000 L CNN
+F 1 ".01uF" H 4550 3950 50  0000 L CNN
+F 2 "" H 4538 3900 50  0001 C CNN
+F 3 "~" H 4500 4050 50  0001 C CNN
+	1    4500 4050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C1
+U 1 1 63CCB915
+P 4150 4050
+F 0 "C1" H 4265 4096 50  0000 L CNN
+F 1 ".01uF" H 4200 3950 50  0000 L CNN
+F 2 "" H 4188 3900 50  0001 C CNN
+F 3 "~" H 4150 4050 50  0001 C CNN
+	1    4150 4050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:CP1 C3
+U 1 1 63CCD72E
+P 5700 4000
+F 0 "C3" H 5815 4046 50  0000 L CNN
+F 1 "10uF" H 5750 3850 50  0000 L CNN
+F 2 "" H 5700 4000 50  0001 C CNN
+F 3 "~" H 5700 4000 50  0001 C CNN
+	1    5700 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R1
+U 1 1 63CCDE38
+P 4150 3050
+F 0 "R1" H 4220 3096 50  0000 L CNN
+F 1 "1M" H 4220 3005 50  0000 L CNN
+F 2 "" V 4080 3050 50  0001 C CNN
+F 3 "~" H 4150 3050 50  0001 C CNN
+	1    4150 3050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R2
+U 1 1 63CCE3FD
+P 4400 3050
+F 0 "R2" H 4470 3096 50  0000 L CNN
+F 1 "3.3K" H 4470 3005 50  0000 L CNN
+F 2 "" V 4330 3050 50  0001 C CNN
+F 3 "~" H 4400 3050 50  0001 C CNN
+	1    4400 3050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R3
+U 1 1 63CCF1C3
+P 5700 3000
+F 0 "R3" H 5770 3046 50  0000 L CNN
+F 1 "47K" H 5770 2955 50  0000 L CNN
+F 2 "" V 5630 3000 50  0001 C CNN
+F 3 "~" H 5700 3000 50  0001 C CNN
+	1    5700 3000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:D D1
+U 1 1 63CCFA0D
+P 5450 3000
+F 0 "D1" V 5404 3079 50  0000 L CNN
+F 1 "D" V 5495 3079 50  0001 L CNN
+F 2 "" H 5450 3000 50  0001 C CNN
+F 3 "~" H 5450 3000 50  0001 C CNN
+	1    5450 3000
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R4
+U 1 1 63CD0046
+P 6400 3000
+F 0 "R4" H 6470 3046 50  0000 L CNN
+F 1 "1K" H 6470 2955 50  0000 L CNN
+F 2 "" V 6330 3000 50  0001 C CNN
+F 3 "~" H 6400 3000 50  0001 C CNN
+	1    6400 3000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R5
+U 1 1 63CD04BA
+P 5950 3350
+F 0 "R5" V 5850 3350 50  0000 C CNN
+F 1 "1K" V 6050 3350 50  0000 C CNN
+F 2 "" V 5880 3350 50  0001 C CNN
+F 3 "~" H 5950 3350 50  0001 C CNN
+	1    5950 3350
+	0    1    1    0   
+$EndComp
+$Comp
+L Transistor_BJT:2N2219 Q1
+U 1 1 63CD1756
+P 6300 3350
+F 0 "Q1" H 6490 3396 50  0000 L CNN
+F 1 "2N2222" H 6490 3305 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-39-3" H 6500 3275 50  0001 L CIN
+F 3 "http://www.onsemi.com/pub_link/Collateral/2N2219-D.PDF" H 6300 3350 50  0001 L CNN
+	1    6300 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Switch:SW_Push SW1
+U 1 1 63CD1FE4
+P 3900 3600
+F 0 "SW1" V 3900 3552 50  0000 R CNN
+F 1 "SW_Push" V 3855 3552 50  0001 R CNN
+F 2 "" H 3900 3800 50  0001 C CNN
+F 3 "~" H 3900 3800 50  0001 C CNN
+	1    3900 3600
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	4550 3350 4150 3350
+Wire Wire Line
+	3900 3350 3900 3400
+Wire Wire Line
+	3900 3800 3900 4300
+Wire Wire Line
+	3900 4300 4150 4300
+Wire Wire Line
+	4850 4300 4850 4350
+Wire Wire Line
+	4150 4200 4150 4300
+Connection ~ 4150 4300
+Wire Wire Line
+	4150 3900 4150 3350
+Connection ~ 4150 3350
+Wire Wire Line
+	4150 3350 3900 3350
+Wire Wire Line
+	4150 3350 4150 3200
+Wire Wire Line
+	4150 2900 4150 2800
+Wire Wire Line
+	4150 2800 4400 2800
+Wire Wire Line
+	4550 3750 4400 3750
+Wire Wire Line
+	4400 3750 4400 3200
+Wire Wire Line
+	4150 4300 4500 4300
+Wire Wire Line
+	4500 4200 4500 4300
+Connection ~ 4500 4300
+Wire Wire Line
+	4500 4300 4850 4300
+Wire Wire Line
+	4550 3550 4500 3550
+Wire Wire Line
+	4500 3550 4500 3900
+Wire Wire Line
+	4400 2900 4400 2800
+Connection ~ 4400 2800
+Wire Wire Line
+	4850 4300 5050 4300
+Connection ~ 4850 4300
+Wire Wire Line
+	5700 3550 5550 3550
+Wire Wire Line
+	5550 3750 5700 3750
+Wire Wire Line
+	5700 3750 5700 3550
+Wire Wire Line
+	5700 3550 5700 3200
+Connection ~ 5700 3550
+Wire Wire Line
+	5450 3150 5450 3200
+Wire Wire Line
+	5450 3200 5700 3200
+Connection ~ 5700 3200
+Wire Wire Line
+	4400 2800 4800 2800
+Wire Wire Line
+	4800 2800 4800 2700
+Connection ~ 4800 2800
+Wire Wire Line
+	4800 2800 5050 2800
+Wire Wire Line
+	5450 2850 5450 2800
+Connection ~ 5450 2800
+Wire Wire Line
+	5450 2800 5700 2800
+Wire Wire Line
+	5700 3150 5700 3200
+Wire Wire Line
+	5700 2800 5700 2850
+Wire Wire Line
+	5050 3950 5050 4300
+Connection ~ 5050 4300
+Wire Wire Line
+	5050 4300 5700 4300
+Wire Wire Line
+	5700 4150 5700 4300
+Wire Wire Line
+	5700 3850 5700 3750
+Connection ~ 5700 3750
+Wire Wire Line
+	6400 2850 6400 2800
+Wire Wire Line
+	6400 2800 5700 2800
+Connection ~ 5700 2800
+Wire Wire Line
+	6400 3550 6400 4300
+Wire Wire Line
+	6400 4300 5700 4300
+Connection ~ 5700 4300
+Wire Wire Line
+	5550 3350 5800 3350
+Text GLabel 6800 3150 2    50   Output ~ 0
+RESETB
+Connection ~ 6400 3150
+Wire Wire Line
+	5050 3150 5050 2800
+Connection ~ 5050 2800
+Wire Wire Line
+	5050 2800 5450 2800
+Wire Wire Line
+	6400 3150 6800 3150
+$EndSCHEMATC
