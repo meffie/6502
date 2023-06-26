@@ -10,6 +10,7 @@ const char DATA[] = {
 #define RESB 2
 #define CLK  3
 #define RWB  4
+#define RX   31
 
 /* gobals */
 unsigned int ticks = 0;
@@ -25,6 +26,7 @@ void setup() {
   pinMode(CLK, INPUT);
   pinMode(RWB, INPUT);
   pinMode(RESB, INPUT);
+  pinMode(RX, INPUT);
   attachInterrupt(digitalPinToInterrupt(CLK), on_clock, RISING);
   attachInterrupt(digitalPinToInterrupt(RESB), on_reset, FALLING);
   Serial.begin(57600);
@@ -39,6 +41,7 @@ void on_clock() {
   char diag[128];
   unsigned int addr = 0;
   unsigned int data = 0;
+  byte rx = 0;
   for (int i = 0; i < 16; i++) {
     int bit = digitalRead(ADDR[i]) ? 1 : 0;
     addr = (addr << 1) | bit;
@@ -47,12 +50,13 @@ void on_clock() {
     int bit = digitalRead(DATA[i]) ? 1 : 0;
     data = (data << 1) | bit;
   }
+  rx = digitalRead(RX);
   if (addr == 0xfffd) {
       ticks = 0;
   }
   char rw = digitalRead(RWB) ? 'r' : 'w';
   char ch = isPrintable(data) ? data : '.';
-  sprintf(diag, "%08d   %04x   %c   %02x %c\n", ticks++, addr, rw, data, ch);
+  sprintf(diag, "%08d   %04x   %c   %02x %c  %02x\n", ticks++, addr, rw, data, ch, rx);
   if (traceall || (0x0000<=addr && addr<=0x4000)) {
       Serial.print(diag);
   }
