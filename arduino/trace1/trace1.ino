@@ -11,6 +11,8 @@ const char DATA[] = {
 #define CLK  3
 #define RWB  4
 #define RX   31
+#define CS0  35
+#define CS1B 37
 
 /* gobals */
 unsigned int ticks = 0;
@@ -27,6 +29,8 @@ void setup() {
   pinMode(RWB, INPUT);
   pinMode(RESB, INPUT);
   pinMode(RX, INPUT);
+  pinMode(CS0, INPUT);
+  pinMode(CS1B, INPUT);
   attachInterrupt(digitalPinToInterrupt(CLK), on_clock, RISING);
   attachInterrupt(digitalPinToInterrupt(RESB), on_reset, FALLING);
   Serial.begin(57600);
@@ -42,6 +46,8 @@ void on_clock() {
   unsigned int addr = 0;
   unsigned int data = 0;
   byte rx = 0;
+  byte cs0 = 0;
+  byte cs1b = 0;
   for (int i = 0; i < 16; i++) {
     int bit = digitalRead(ADDR[i]) ? 1 : 0;
     addr = (addr << 1) | bit;
@@ -51,12 +57,14 @@ void on_clock() {
     data = (data << 1) | bit;
   }
   rx = digitalRead(RX);
+  /* cs0 = digitalRead(CS0); */
+  /* cs1b = digitalRead(CS1B); */
   if (addr == 0xfffd) {
       ticks = 0;
   }
   char rw = digitalRead(RWB) ? 'r' : 'w';
   char ch = isPrintable(data) ? data : '.';
-  sprintf(diag, "%08d   %04x   %c   %02x %c  %02x\n", ticks++, addr, rw, data, ch, rx);
+  sprintf(diag, "%08d   %04x   %c   %02x %c\n", ticks++, addr, rw, data, ch);
   if (traceall || (0x0000<=addr && addr<=0x4000)) {
       Serial.print(diag);
   }
