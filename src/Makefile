@@ -1,7 +1,4 @@
 IMAGE := hello
-BINS := $(patsubst %.s,%.bin,$(wildcard *.s))
-
-all: $(BINS)
 
 burn: $(IMAGE).bin
 	minipro -p AT28C256 -w $(IMAGE).bin
