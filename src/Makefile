@@ -1,4 +1,5 @@
-IMAGE := hello
+
+IMAGE ?= hello
 
 burn: $(IMAGE).bin
 	minipro -p AT28C256 -w $(IMAGE).bin
