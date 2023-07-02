@@ -101,6 +101,7 @@ lcd_instruction:
 
 lcd_print_char:
     ; Char to print is loaded in A.
+    pha
     jsr lcd_wait
     sta PORTB
     lda #RS             ; Set RS, clear RW and E
@@ -109,6 +110,7 @@ lcd_print_char:
     sta PORTA
     lda #RS             ; Set RS, clear RW and E
     sta PORTA
+    pla
     rts
 
 ;-----------------------------------------------------------------------------
