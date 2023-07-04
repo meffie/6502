@@ -39,7 +39,7 @@ read_data:
     beq read_data      ; Loop until byte received
 
     lda ACIA_DATA      ; Read the received byte
-    jsr lcd_print_char ; Display the received byte
+    jsr display_byte   ; Display the received byte
     jsr send_byte      ; Echo byte back
     jmp read_data      ; Loop forever.
 
@@ -50,8 +50,13 @@ read_data:
 ; Transmitter Data Register Empty (TDRE) flag bug.
 ;
 send_byte:
-    sta ACIA_DATA  ; Write byte to transmit register.
     phx
+    sta ACIA_DATA  ; Write byte to transmit register.
+; if not wdc chip with bug
+    ; lda ACIA_STATUS
+    ; and #%00010000 ; Get the transmit data empty flag
+    ; ...
+; endif
     ldx #180       ; Delay for 9600 baud transmission.
 delay:
     nop
@@ -61,6 +66,18 @@ delay:
     rts
 
     .include lcd.s
+
+display_byte:
+    pha
+    jsr lcd_home
+    jsr lcd_print_char ; Display the received byte
+    pha
+    lda #$20           ; Space char
+    jsr lcd_print_char ; Print space
+    pla
+    jsr lcd_print_byte
+    pla
+    rts
 
 nmi:
     rti

@@ -20,6 +20,7 @@ RS = %00100000
 
 lcd_setup:
     ; Setup I/O ports.
+    pha
     lda #%11111111      ; Port B; output mode on all pins
     sta DDRB
     lda #%11100000      ; Port A; output mode on top 3 pins
@@ -32,16 +33,21 @@ lcd_setup:
     jsr lcd_instruction
     lda #%00000110      ; Increment cursor right, no scroll
     jsr lcd_instruction
+    pla
     rts
 
 lcd_clear:
+    pha
     lda #%00000001      ; Clear display.
     jsr lcd_instruction
+    pla
     rts
 
 lcd_home:
+    pha
     lda #%00000010      ; Move cursor to home position.
     jsr lcd_instruction
+    pla
     rts
 
 lcd_print_string:
@@ -55,7 +61,7 @@ lcd_print_string:
 lcd_next_char:
     lda (lcd_string),y   ; Load next char
     beq lcd_done         ; String is nul terminated
-    jsr lcd_wait         ; Wait until display is ready
+    jsr _lcd_wait         ; Wait until display is ready
     sta PORTB            ; Output char to display
     lda #(RS | E)        ; Set RS and E to send char
     sta PORTA
@@ -66,7 +72,7 @@ lcd_next_char:
 lcd_done:
     rts                  ; Nul char found
 
-lcd_wait:
+_lcd_wait:
     ; Wait until the LCD busy flag is clear before sending
     ; next instruction or data.
     pha
@@ -89,7 +95,7 @@ lcd_busy_retry:
 
 lcd_instruction:
     ; Instruction is loaded in A.
-    jsr lcd_wait
+    jsr _lcd_wait
     sta PORTB
     lda #$0             ; Clear RS, RW, E bits
     sta PORTA
@@ -102,7 +108,7 @@ lcd_instruction:
 lcd_print_char:
     ; Char to print is loaded in A.
     pha
-    jsr lcd_wait
+    jsr _lcd_wait
     sta PORTB
     lda #RS             ; Set RS, clear RW and E
     sta PORTA
@@ -154,6 +160,8 @@ lcd_print_address:
 ;
 lcd_print_byte:
     pha
+    phx
+    pha
     and #$f0
     clc
     ror
@@ -163,12 +171,14 @@ lcd_print_byte:
     tax
     lda lcd_hexdigits,x
     jsr lcd_print_char
-    ;lda ($08),y
     pla
     and #$0f
     tax
     lda lcd_hexdigits,x
     jsr lcd_print_char
+    plx
+    pla
     rts
+
 lcd_hexdigits:
     .byte "0123456789abcdef"
