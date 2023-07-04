@@ -3,14 +3,14 @@ IMAGE ?= hello
 
 burn: rom
 
-rom: $(IMAGE).bin
-	minipro -p AT28C256 -w $(IMAGE).bin
+rom: $(IMAGE).rom
+	minipro -p AT28C256 -w $(IMAGE).rom
 
-%.bin: %.s
+%.rom: %.s
 	vasm6502_oldstyle -wdc02 -quiet -dotdir -Fbin -o $@ $<
 
 clean:
-	rm -rf *.bin
+	rm -rf *.bin *.rom
 
 hello.bin: lcd.s
 memtest.bin: lcd.s

@@ -33,6 +33,8 @@ banner_next:
 ;
 ; Display and echo each byte received on the serial port.
 ;
+; TODO: Interrupt driven!
+;
 read_data:
     lda ACIA_STATUS    ; Read ACIA status register
     and #%00001000     ; Get the receiver data full flag
@@ -41,6 +43,10 @@ read_data:
     lda ACIA_DATA      ; Read the received byte
     jsr display_byte   ; Display the received byte
     jsr send_byte      ; Echo byte back
+    cmp #$0d           ; Did we get a carriage return?
+    bne read_data      ;   No: Wait for next character
+    lda #$0a           ;   Yes: Send a line feed too
+    jsr send_byte
     jmp read_data      ; Loop forever.
 
 ;
@@ -86,7 +92,7 @@ irq:
     rti
 
 banner:
-    .asciiz "Hello World!"
+    .ascii "Welcome to the 6502 Breadboard Computer!", $0d, $0a, $00
 
     .org $fffa   ; Start of vectors
     .word nmi
