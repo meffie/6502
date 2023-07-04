@@ -159,25 +159,23 @@ lcd_print_address:
 ; A = value to print
 ;
 lcd_print_byte:
-    pha
-    phx
-    pha
-    and #$f0
-    clc
-    ror
-    ror
-    ror
-    ror
-    tax
-    lda lcd_hexdigits,x
-    jsr lcd_print_char
-    pla
-    and #$0f
-    tax
-    lda lcd_hexdigits,x
-    jsr lcd_print_char
-    plx
-    pla
+    pha                  ; Save A
+    phx                  ; Save X
+    pha                  ; Save A for low nibble
+    lsr                  ; Shift four times to get high nibble
+    lsr
+    lsr
+    lsr
+    tax                  ; Move high nibble to index
+    lda lcd_hexdigits,x  ; Lookup hex digit character for high nibble
+    jsr lcd_print_char   ; Display high nibble hex char
+    pla                  ; Restore A for low nibble
+    and #$0f             ; Mask off high nibble to get low nibble
+    tax                  ; Move low nibble to index
+    lda lcd_hexdigits,x  ; Lookup hex digit character for low nibble
+    jsr lcd_print_char   ; Display low nibble
+    plx                  ; Restore X
+    pla                  ; Restore A
     rts
 
 lcd_hexdigits:
