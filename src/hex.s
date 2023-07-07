@@ -19,7 +19,7 @@ reset:
 spin:
     jmp spin
 
-    .include "lcd.s"
+    .include lcd.inc
 
     .org $fffc
     .word reset   ; Reset vector.

@@ -71,7 +71,7 @@ delay:
     plx
     rts
 
-    .include lcd.s
+    .include lcd.inc
 
 display_byte:
     pha

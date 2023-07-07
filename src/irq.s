@@ -64,7 +64,7 @@ irq_inc_done:              ; No: Skip high counter byte.
     rti
 
 
-    .include "lcd.s"
+    .include lcd.inc
 
     .org $fffa
     .word nmi     ; Non-maskable Interrupt Request vector.

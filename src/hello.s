@@ -21,7 +21,7 @@ done:
     nop
     jmp done  ; Just spin forever
 
-    .include lcd.s
+    .include lcd.inc
 
 nmi:
     rti
