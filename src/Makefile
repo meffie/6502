@@ -12,8 +12,8 @@ rom: $(IMAGE).rom
 clean:
 	rm -rf *.bin *.rom
 
-hello.bin: lcd.s
-memtest.bin: lcd.s
-hex.bin: lcd.s
-irq.bin: lcd.s
-serial.bin: lcd.s
+hello.bin: lcd.inc
+memtest.bin: lcd.inc
+hex.bin: lcd.inc
+irq.bin: lcd.inc
+serial.bin: lcd.inc

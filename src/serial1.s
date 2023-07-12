@@ -1,5 +1,5 @@
 ;
-; Serial communications test.
+; Serial port example program.
 ;
 
 ; ACIA 6551 Registers
