@@ -2,8 +2,7 @@
 ; 65C22 Timer 2 pulse countdown test.
 ;
 ; A debounced push button is connected to PB6 to generate
-; countdown pulses, and a push button (normally high) is
-; connected to CA1 to start a T2 countdown.
+; countdown pulses.
 ;
 
 ; 65C22 Registers
@@ -20,44 +19,72 @@ VIA_IFR    = VIA_BASE + $d     ; Interrupt Flag Register
 VIA_IER    = VIA_BASE + $e     ; Interrupt Enable Register
 
     .org $8000      ; Start of ROM
+
 reset:
-    lda #%11111111  ; Set PA0-PA7 to input
-    sta VIA_DDRA
-    lda #%00000010  ; Set PB6 to input
+    ; Setup 65C22
+    lda #%00000010  ; Set PB6 to input mode
     sta VIA_DDRB
-    lda #%00001000  ; CA1=negative active edge
-    sta VIA_PCR
-    lda #%10000010  ; Enable interrupt on CA1 activation
-    sta VIA_IER
-    lda #%01111101  ; Disable all other interrupts
-    sta VIA_IER
-    cli             ; Enable interrupts
 
-loop:               ; Main loop
-    nop             ;  just hangout and wait for interrupts
-    jmp loop        ;  until the end of time
+    lda #%00100000  ; Set T2 to pulse countdown mode
+    sta VIA_ACR
 
-irq:
+    lda #%01011111  ; Disable all interrupts except T2 (don't change T2)
+    sta VIA_IER
+
+    lda #%10100000  ; Enable the T2 interrupt (don't change others)
+    sta VIA_IER
+
+    ; Enable interrupts.
+    cli
+
+    ; Set the T2 countdown
+    lda #$04        ; Set latch low byte
+    sta VIA_T2CL
+    lda #$00        ; Set T2 counter high byte and set low byte from latch
+    sta VIA_T2CH    ; Start counting pulses
+
+main_loop:
+    nop             ; Just wait for interrupts
+    jmp main_loop
+
+irq_handler:
     pha
-    lda VIA_IFR
-    and #%10000000  ; 65C22 interrupt raised?
-    beq irq_done    ;   no: exit irq handler
-    lda VIA_IFR
-    and #%00000010  ; Is CA1 active?
-    beq irq_done    ;   no: exit irq handler
-    lda VIA_PORT_A  ; Clear interrupt
-    ; todo: start timer 2
-    nop
-    nop
+
+    ; Non-optimized version.
+    ; lda VIA_IFR
+    ; and #%10000000  ; 65C22 interrupt?
+    ; beq irq_done    ; no: exit handler
+
+    ; lda VIA_IFR
+    ; and #%00100000  ; T2 interrupt?
+    ; beq irq_done    ; no: exit handler
+
+    ; Optimized version. Use the BIT instruction to
+    ; avoid extra IFR accesses. The BIT instruction
+    ; transfers the IFR7 bit to the N flag, and sets
+    ; the Z flag based on the logical and of the A
+    ; register.
+    lda #%00100000    ; Set the bit mask to check the T2 interrupt flag (IFR5)
+    bit VIA_IFR       ; Set the N to IRF7 and Z to IFR5
+    bpl irq_done      ; Done when IFR7 is 0 (N=0)
+    beq irq_done      ; Done when IFR5 is 0 (Z=0)
+
+    ; Restart timer 2.
+    ; Low latch is already setup. The low latch is written
+    ; to the counter low byte when the high byte (VIA_T2CH)
+    ; is written.
+    lda #$00        ; Start counting pulses
+    sta VIA_T2CH    ; and clear the T2 interrupt flag
+
 irq_done:
     pla
     rti
 
-nmi:
+nmi_handler:
     rti
 
     .org $fffa
 vectors:
-    .word nmi       ; Non-maskable interrupt
-    .word reset     ; Reset
-    .word irq       ; Interrupt Request
+    .word nmi_handler       ; Non-maskable interrupt
+    .word reset             ; Reset
+    .word irq_handler       ; Interrupt Request
