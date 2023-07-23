@@ -1,22 +1,20 @@
 ;
-; Serial port example program using IRQ.
+; Serial port example program using receiver IRQ.
 ;
 
-; ACIA 6551 Registers
-ACIA_DATA     = $4000     ; Transmit/Receiver Data Register
-ACIA_STATUS   = $4001     ; Programmed Reset/Status Register
-ACIA_COMMAND  = $4002     ; Command Register
-ACIA_CONTROL  = $4003     ; Control Register
+; ACIA 65C51 Registers
+ACIA_BASE     = $4000           ; Base address of the 65C51
+ACIA_DATA     = ACIA_BASE       ; Transmit/Receiver Data Register
+ACIA_STATUS   = ACIA_BASE + $1  ; Programmed Reset/Status Register
+ACIA_COMMAND  = ACIA_BASE + $2  ; Command Register
+ACIA_CONTROL  = ACIA_BASE + $3  ; Control Register
 
 ; Zero page registers.
 RX_START = $4
 RX_END = $5
-TX_START = $6
-TX_END = $7
 
-; Receive and transmit circular buffers.
-RX_BUFFER = $200
-TX_BUFFER = $300
+; Receive circular buffer (page $02)
+RX_BUFFER = $0200
 
     .org $8000           ; Start of ROM
 
