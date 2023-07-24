@@ -1,5 +1,7 @@
 *.bin
 *.dump
 *.rom
+*.lst
+*.bak
+*.*-bak
 makerom
-*-bak

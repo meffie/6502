@@ -7,10 +7,10 @@ rom: $(IMAGE).rom
 	minipro -p AT28C256 -w $(IMAGE).rom
 
 %.rom: %.s
-	vasm6502_oldstyle -wdc02 -quiet -dotdir -Fbin -o $@ $<
+	vasm6502_oldstyle -wdc02 -quiet -dotdir -Fbin -L $(IMAGE).lst -o $@ $<
 
 clean:
-	rm -rf *.bin *.rom
+	rm -rf *.bin *.rom *.lst
 
 hello.bin: lcd.inc
 memtest.bin: lcd.inc

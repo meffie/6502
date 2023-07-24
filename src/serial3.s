@@ -34,7 +34,9 @@
 ; [1]: http://forum.6502.org/viewtopic.php?f=1&t=5482&p=66433#p66433
 ;
 
+;----------------------------------------------------------------------
 ; 65C22 Registers
+;
 VIA_BASE   = $6000             ; The VIA 65C22 base address
 VIA_PORT_B = VIA_BASE + $0     ; Port B (ORB/IRB)
 VIA_PORT_A = VIA_BASE + $1     ; Port A (ORA/IRA)
@@ -47,15 +49,26 @@ VIA_PCR    = VIA_BASE + $c     ; Peripheral Control Register
 VIA_IFR    = VIA_BASE + $d     ; Interrupt Flag Register
 VIA_IER    = VIA_BASE + $e     ; Interrupt Enable Register
 
+;----------------------------------------------------------------------
 ; 65C51 Registers
+;
 ACIA_BASE     = $4000           ; Base address of the 65C51
 ACIA_DATA     = ACIA_BASE       ; Transmit/Receiver Data Register
 ACIA_STATUS   = ACIA_BASE + $1  ; Programmed Reset/Status Register
 ACIA_COMMAND  = ACIA_BASE + $2  ; Command Register
 ACIA_CONTROL  = ACIA_BASE + $3  ; Control Register
 
-    .org $8000      ; Start of ROM
+;----------------------------------------------------------------------
+; Transmit ring buffer
+;
+RING_BUFFER_WRITE = $01
+RING_BUFFER_READ = $02
+RING_BUFFER_BASE = $0300
 
+;----------------------------------------------------------------------
+; Initialization
+;
+    .org $8000      ; Start of ROM
 reset:
     ; Setup the 65C22
     lda #%00000010  ; Set PB6 to input mode
@@ -72,14 +85,40 @@ reset:
     ; Enable interrupts.
     cli
 
-; start counting
-    lda #$00          ; Start counting pulses again
-    sta VIA_T2CH      ;   and clear the T2 interrupt flag
 
+;----------------------------------------------------------------------
+; Main loop
+;
+; This is just a test program. Just loop while waiting for interrupts.
+;
+    ; Start counting
+    ; lda #$00          ; Start counting pulses again
+    ; sta VIA_T2CH      ;   and clear the T2 interrupt flag
 main_loop:
-    nop             ; Just wait for interrupts in this test program.
+    nop
     jmp main_loop
 
+;----------------------------------------------------------------------
+; Ring buffer routines
+;
+
+ring_buffer_write:
+    phx
+    ldx RING_BUFFER_WRITE
+    sta RING_BUFFER_BASE,x
+    plx
+    rts
+
+ring_buffer_read:
+    plx
+    ldx RING_BUFFER_READ
+    lda RING_BUFFER_BASE,x
+    phx
+    rts
+
+;----------------------------------------------------------------------
+; Interrupt handlers
+;
 irq_handler:
     pha
     lda #%00100000    ; Set the bit mask to check the T2 interrupt flag (IFR5)
@@ -100,10 +139,16 @@ irq_done:
     pla
     rti
 
+;----------------------------------------------------------------------
+; Non-maskable Interrupt handler
+;
 nmi_handler:
-    rti
+    rti     ; Not implemented
 
-    .org $fffa  # Vectors
+;----------------------------------------------------------------------
+; Vectors
+;
+    .org $fffa
     .word nmi_handler       ; Non-maskable interrupt
     .word reset             ; Reset
     .word irq_handler       ; Interrupt Request
