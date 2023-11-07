@@ -1,7 +1,7 @@
 ;
 ; W65C51S transmit bug work-around with interrupts
 ;
-; The WDC W65C51N has a infamous hardware bug which makes it impossible to know
+; The WDC W65C51N has an infamous hardware bug which makes it impossible to know
 ; when it is safe to write the next byte into the transmit register.  To
 ; work-around this hardware bug, we need to delay for some baud-rate dependent
 ; time before writing the next byte to send, otherwise, the transmit shift
@@ -25,8 +25,9 @@
 ; rate of 16 times the baud rate. The 65C51C RxC pin is connected to the 65C22
 ; PB6 and the pulses are counted down when a byte is being transmitted. When
 ; the timer interrupt occurs, we know enough time has lapsed to make it safe to
-; write the next byte.  Currently, I am using a 9600 baud rate, which is slow
-; enough for the countdown timer when running at a 1Mz clock.
+; write the next byte.  Currently, I am using a 9600 baud rate, which should
+; be slow enough for the countdown timer when running the 6502 system with
+; a 1Mz clock.
 ;
 ; Note that the PB6 pin must be available, so the LCD module must be removed or
 ; the ports swapped so the PB6 line is available.
@@ -61,9 +62,9 @@ ACIA_CONTROL  = ACIA_BASE + $3  ; Control Register
 ;----------------------------------------------------------------------
 ; Transmit ring buffer
 ;
+RING_BUFFER_BASE  = $0300
 RING_BUFFER_WRITE = $01
-RING_BUFFER_READ = $02
-RING_BUFFER_BASE = $0300
+RING_BUFFER_READ  = $02
 
 ;----------------------------------------------------------------------
 ; Initialization
@@ -84,7 +85,6 @@ reset:
 
     ; Enable interrupts.
     cli
-
 
 ;----------------------------------------------------------------------
 ; Main loop
